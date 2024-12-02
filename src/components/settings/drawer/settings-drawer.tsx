@@ -10,6 +10,8 @@ import { setTheme, ThemeMode, toggleDrawer } from 'src/store/slices/settings-sli
 import Iconify from '../../iconify';
 import Scrollbar from '../../scrollbar';
 import BaseOptions from './base-option';
+import { Box, Link } from '@mui/material';
+import { AppConfig } from 'src/configs/app-config';
 
 // ----------------------------------------------------------------------
 
@@ -56,6 +58,18 @@ export default function SettingsDrawer() {
     </div>
   );
 
+  const renderAppInfo = (
+    <Box>
+      <Typography variant="caption" component="div" sx={{ ...labelStyles }}>
+        Created by{' '}
+        <Link href={AppConfig.links.landingPage} target={'_blank'} color={'text.primary'}>
+          Gowth6m
+        </Link>{' '}
+        👋
+      </Typography>
+    </Box>
+  );
+
   return (
     <Drawer
       anchor="right"
@@ -79,6 +93,9 @@ export default function SettingsDrawer() {
           {renderMode}
         </Stack>
       </Scrollbar>
+      <Stack spacing={3} sx={{ p: 3 }}>
+        {renderAppInfo}
+      </Stack>
     </Drawer>
   );
 }

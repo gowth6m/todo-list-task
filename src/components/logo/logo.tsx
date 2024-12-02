@@ -83,7 +83,11 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     }
 
     return (
-      <MuiLink component={RouterLink} href="/" sx={{ display: 'contents' }}>
+      <MuiLink
+        component={RouterLink}
+        href={AppConfig.links.landingPage}
+        sx={{ display: 'contents' }}
+      >
         {squareLogo ? square : logo}
       </MuiLink>
     );

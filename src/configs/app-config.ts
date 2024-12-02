@@ -10,4 +10,7 @@ export const AppConfig = {
   localStorageKeys: {
     store: 'todo-list-app-store',
   },
+  links: {
+    landingPage: 'https://gowtham.io',
+  },
 };
