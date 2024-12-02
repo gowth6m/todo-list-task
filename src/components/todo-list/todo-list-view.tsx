@@ -1,10 +1,25 @@
 import React, { useState } from 'react';
 import { Droppable, DragDropContext } from '@hello-pangea/dnd';
 
-import { Box, Card, Stack, TextField, Container, IconButton, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  Stack,
+  Tooltip,
+  TextField,
+  Container,
+  IconButton,
+  Typography,
+} from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from 'src/store/hooks';
-import { Todo, addTodo, reorderTodos } from 'src/store/slices/todo-slice';
+import {
+  Todo,
+  addTodo,
+  clearTodos,
+  reorderTodos,
+  saveToLocalStorage,
+} from 'src/store/slices/todo-slice';
 
 import Iconify from '../iconify';
 import Scrollbar from '../scrollbar';
@@ -22,7 +37,7 @@ const TodoListView: React.FC = () => {
 
   const dispatch = useAppDispatch();
 
-  const todos = useAppSelector((state) => state.todos.todos);
+  const { todos, inSyncWithLocalStorage } = useAppSelector((state) => state.todos);
 
   // ----------------- HANDLERS ---------------------------
 
@@ -52,9 +67,17 @@ const TodoListView: React.FC = () => {
     setToastOpen(false);
   };
 
+  const handleSaveToLocalStorage = () => {
+    dispatch(saveToLocalStorage());
+  };
+
+  const handleClearTodos = () => {
+    dispatch(clearTodos());
+  };
+
   // ----------------- RENDERS ----------------------------
 
-  const renderAddTodo = (
+  const renderHeaderSection = (
     <Card
       variant="outlined"
       sx={{
@@ -90,20 +113,56 @@ const TodoListView: React.FC = () => {
           helperText={error}
         />
 
-        <IconButton
-          color="primary"
-          type="submit"
-          sx={{
-            width: 48,
-            height: 48,
-            borderRadius: 1,
-            color: 'primary.contrastText',
-            bgcolor: 'primary.main',
-            '&:hover': { bgcolor: 'primary.darker' },
-          }}
-        >
-          <Iconify icon="mdi:plus" width={24} height={24} />
-        </IconButton>
+        <Tooltip title="Add Todo" arrow>
+          <IconButton
+            color="primary"
+            type="submit"
+            sx={{
+              width: 48,
+              height: 48,
+              borderRadius: 1,
+              color: 'primary.contrastText',
+              bgcolor: 'primary.main',
+              '&:hover': { bgcolor: 'primary.darker' },
+            }}
+          >
+            <Iconify icon="mdi:plus" width={24} height={24} />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Save todos to local storage" arrow>
+          <IconButton
+            color="primary"
+            onClick={handleSaveToLocalStorage}
+            disabled={inSyncWithLocalStorage}
+            sx={{
+              width: 48,
+              height: 48,
+              borderRadius: 1,
+              color: 'secondary.contrastText',
+              bgcolor: 'secondary.main',
+              '&:hover': { bgcolor: 'secondary.darker' },
+            }}
+          >
+            <Iconify icon="mdi:content-save" width={24} height={24} />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Clear all todos" arrow>
+          <IconButton
+            color="primary"
+            onClick={handleClearTodos}
+            disabled={!todos.length}
+            sx={{
+              width: 48,
+              height: 48,
+              borderRadius: 1,
+              color: 'error.contrastText',
+              bgcolor: 'error.main',
+              '&:hover': { bgcolor: 'error.darker' },
+            }}
+          >
+            <Iconify icon="mdi:refresh" width={24} height={24} />
+          </IconButton>
+        </Tooltip>
       </Box>
     </Card>
   );
@@ -139,7 +198,6 @@ const TodoListView: React.FC = () => {
                 <Stack
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  spacing={2}
                   padding={3}
                   height={'100%'}
                 >
@@ -172,7 +230,7 @@ const TodoListView: React.FC = () => {
         justifyContent={'flex-start'}
         gap={3}
       >
-        {renderAddTodo}
+        {renderHeaderSection}
 
         {renderDisplayTodos}
 

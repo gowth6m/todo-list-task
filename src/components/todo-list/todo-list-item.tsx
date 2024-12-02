@@ -41,6 +41,7 @@ const TodoListItem: React.FC<TodoListItemProps> = ({ todo, index, sx, ...other }
             onClick={openDetails.onTrue}
             sx={{
               width: 1,
+              marginY: 1,
               borderRadius: 1.5,
               borderWidth: 1,
               borderStyle: 'dashed',
