@@ -1,19 +1,7 @@
 import React, { useState } from 'react';
 import { Droppable, DragDropContext } from '@hello-pangea/dnd';
 
-import {
-  Box,
-  Card,
-  Stack,
-  Alert,
-  Snackbar,
-  TextField,
-  Container,
-  IconButton,
-  Typography,
-} from '@mui/material';
-
-import { useResponsive } from 'src/hooks/use-responsive';
+import { Box, Card, Stack, TextField, Container, IconButton, Typography } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 import { Todo, addTodo, reorderTodos } from 'src/store/slices/todo-slice';
@@ -21,6 +9,7 @@ import { Todo, addTodo, reorderTodos } from 'src/store/slices/todo-slice';
 import Iconify from '../iconify';
 import Scrollbar from '../scrollbar';
 import TodoListItem from './todo-list-item';
+import TodoListIntroToast from './todo-list-intro-toast';
 
 // ----------------------------------------------------------------------
 
@@ -30,8 +19,6 @@ const TodoListView: React.FC = () => {
   const [error, setError] = useState('');
 
   const [toastOpen, setToastOpen] = useState(true);
-
-  const lgUp = useResponsive('up', 'lg');
 
   const dispatch = useAppDispatch();
 
@@ -80,6 +67,11 @@ const TodoListView: React.FC = () => {
       }}
     >
       <Box
+        component={'form'}
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleAddTodo();
+        }}
         sx={{
           display: 'flex',
           gap: 2,
@@ -100,7 +92,7 @@ const TodoListView: React.FC = () => {
 
         <IconButton
           color="primary"
-          onClick={handleAddTodo}
+          type="submit"
           sx={{
             width: 48,
             height: 48,
@@ -116,80 +108,58 @@ const TodoListView: React.FC = () => {
     </Card>
   );
 
-  const renderDisplayTodos = (
-    <Card
-      variant="outlined"
-      sx={{
-        height: 'calc(100vh - 300px)',
-      }}
+  const renderEmptyTodoListMessage = (
+    <Stack
+      direction={'column'}
+      justifyContent={'center'}
+      alignItems={'center'}
+      height={'calc(100vh - 400px)'}
+      gap={2}
     >
-      <Scrollbar>
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="todoList">
-            {(provided) => (
-              <Stack
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-                spacing={2}
-                sx={{
-                  py: 3,
-                  px: 3,
-                }}
-              >
-                {todos.length === 0 ? (
-                  <Stack
-                    direction={'column'}
-                    justifyContent={'center'}
-                    alignItems={'center'}
-                    height={'calc(100vh - 400px)'}
-                    gap={2}
-                  >
-                    <Typography variant={'h5'} color={'text.disabled'}>
-                      No todos yet
-                    </Typography>
-                    <Typography variant={'body2'} color={'text.disabled'}>
-                      Add a new todo to get started
-                    </Typography>
-                  </Stack>
-                ) : (
-                  <>
-                    {todos.map((todo: Todo, index: number) => (
-                      <TodoListItem key={todo.id} todo={todo} index={index} />
-                    ))}
-                  </>
-                )}
-                {provided.placeholder}
-              </Stack>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </Scrollbar>
-    </Card>
+      <Typography variant={'h5'} color={'text.disabled'}>
+        No todos yet
+      </Typography>
+      <Typography variant={'body2'} color={'text.disabled'}>
+        Add a new todo to get started
+      </Typography>
+    </Stack>
   );
 
-  const renderToast = (
-    <Snackbar
-      open={toastOpen}
-      onClose={handleCloseToast}
-      autoHideDuration={6000}
-      anchorOrigin={{ vertical: 'bottom', horizontal: lgUp ? 'right' : 'center' }}
-      sx={{
-        width: {
-          xs: '100%',
-          md: 400,
-        },
-      }}
-    >
-      <Alert onClose={handleCloseToast} severity="info" sx={{ width: '100%' }}>
-        <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-          Welcome to the Todo App 👋
-        </Typography>
-        <Typography variant="body2">
-          Add your tasks and drag to reorder them. You can also click on a task to view more
-          details.
-        </Typography>
-      </Alert>
-    </Snackbar>
+  const renderDisplayTodos = (
+    <Card variant="outlined">
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="todoList">
+          {(provided) => (
+            <Box height={'calc(100vh - 300px)'} overflow={'hidden'}>
+              <Scrollbar
+                sx={{
+                  height: '100%',
+                }}
+              >
+                <Stack
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                  spacing={2}
+                  padding={3}
+                  height={'100%'}
+                >
+                  {!todos.length ? (
+                    renderEmptyTodoListMessage
+                  ) : (
+                    <>
+                      {todos.map((todo: Todo, index: number) => (
+                        <TodoListItem key={todo.id} todo={todo} index={index} />
+                      ))}
+                    </>
+                  )}
+                  {provided.placeholder}
+                </Stack>
+              </Scrollbar>{' '}
+            </Box>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </Card>
   );
 
   return (
@@ -206,7 +176,7 @@ const TodoListView: React.FC = () => {
 
         {renderDisplayTodos}
 
-        {renderToast}
+        <TodoListIntroToast open={toastOpen} onClose={handleCloseToast} />
       </Box>
     </Container>
   );
