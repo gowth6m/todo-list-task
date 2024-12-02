@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
 import { Droppable, DragDropContext } from '@hello-pangea/dnd';
 
-import { Box, Card, Stack, TextField, Container, IconButton, Typography } from '@mui/material';
+import {
+  Box,
+  Card,
+  Stack,
+  TextField,
+  Container,
+  IconButton,
+  Typography,
+  Alert,
+  Snackbar,
+} from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 import { Todo, addTodo, reorderTodos } from 'src/store/slices/todo-slice';
@@ -9,6 +19,7 @@ import { Todo, addTodo, reorderTodos } from 'src/store/slices/todo-slice';
 import Iconify from '../iconify';
 import Scrollbar from '../scrollbar';
 import TodoListItem from './todo-list-item';
+import { useResponsive } from 'src/hooks/use-responsive';
 
 // ----------------------------------------------------------------------
 
@@ -16,6 +27,10 @@ const TodoListView: React.FC = () => {
   const [text, setText] = useState('');
 
   const [error, setError] = useState('');
+
+  const [toastOpen, setToastOpen] = useState(true);
+
+  const lgUp = useResponsive('up', 'lg');
 
   const dispatch = useAppDispatch();
 
@@ -43,6 +58,10 @@ const TodoListView: React.FC = () => {
         destinationIndex: destination.index,
       })
     );
+  };
+
+  const handleCloseToast = () => {
+    setToastOpen(false);
   };
 
   // ----------------- RENDERS ----------------------------
@@ -147,6 +166,31 @@ const TodoListView: React.FC = () => {
     </Card>
   );
 
+  const renderToast = (
+    <Snackbar
+      open={toastOpen}
+      onClose={handleCloseToast}
+      autoHideDuration={6000}
+      anchorOrigin={{ vertical: 'bottom', horizontal: lgUp ? 'right' : 'center' }}
+      sx={{
+        width: {
+          xs: '100%',
+          md: 400,
+        },
+      }}
+    >
+      <Alert onClose={handleCloseToast} severity="info" sx={{ width: '100%' }}>
+        <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+          Welcome to the Todo App 👋
+        </Typography>
+        <Typography variant="body2">
+          Add your tasks and drag to reorder them. You can also click on a task to view more
+          details.
+        </Typography>
+      </Alert>
+    </Snackbar>
+  );
+
   return (
     <Container maxWidth={'md'}>
       <Box
@@ -160,6 +204,8 @@ const TodoListView: React.FC = () => {
         {renderAddTodo}
 
         {renderDisplayTodos}
+
+        {renderToast}
       </Box>
     </Container>
   );
