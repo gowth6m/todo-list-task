@@ -74,7 +74,7 @@ export default function SettingsDrawer() {
         </Link>{' '}
         {AppConfig.metadata.version !== '' &&
           !!AppConfig.metadata.version &&
-          `v${AppConfig.metadata.version}`}
+          `${AppConfig.metadata.version}`}
       </Typography>
     </Box>
   );

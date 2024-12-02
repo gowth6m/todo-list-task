@@ -40,13 +40,21 @@ const TodoListDetails = ({
   onDeleteTodo,
   ...other
 }: TodoListDetailsProps) => {
-  const renderField = (label: string, field: keyof Todo, value: string | number | undefined) => (
+  const renderField = (
+    label: string,
+    field: keyof Todo,
+    value: string | number | undefined,
+    readonly?: boolean
+  ) => (
     <Stack direction={'column'} justifyContent={'space-between'} gap={1}>
       <Typography variant={'overline'} sx={{ color: 'text.secondary' }}>
         {label}
       </Typography>
       <TextField
         fullWidth
+        inputProps={{
+          readOnly: Boolean(readonly),
+        }}
         value={value}
         onChange={(e) =>
           onUpdateTodo({
@@ -83,7 +91,7 @@ const TodoListDetails = ({
     <Stack spacing={2} sx={{ p: 2.5 }}>
       {renderField('Title', 'title', todo.title)}
       {renderField('Description', 'description', todo.description ?? '')}
-      {renderField('Created at', 'createdAt', fToNow(todo.createdAt))}
+      {renderField('Created at', 'createdAt', fToNow(todo.createdAt), true)}
       {renderMarkAsComplete}
 
       <Button variant={'contained'} onClick={onClose}>

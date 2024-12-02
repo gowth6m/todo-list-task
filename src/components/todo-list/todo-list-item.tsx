@@ -1,7 +1,8 @@
 import React from 'react';
+import { m } from 'framer-motion';
 import { Draggable } from '@hello-pangea/dnd';
 
-import { Chip, Paper, Stack, SxProps, useTheme, Typography } from '@mui/material';
+import { Box, Chip, Paper, Stack, SxProps, useTheme, Typography } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -11,6 +12,7 @@ import { bgBlur } from 'src/theme/css';
 import { useAppDispatch } from 'src/store/hooks';
 import { Todo, deleteTodo, updateTodo } from 'src/store/slices/todo-slice';
 
+import { varFade } from '../animate';
 import TodoListDetails from './todo-list-details';
 
 // ----------------------------------------------------------------------
@@ -29,7 +31,7 @@ const TodoListItem: React.FC<TodoListItemProps> = ({ todo, index, sx, ...other }
   const openDetails = useBoolean(false);
 
   return (
-    <>
+    <Box component={m.div} {...varFade({ durationIn: 0.2 }).inDown}>
       <Draggable draggableId={todo.id} index={index}>
         {(provided, snapshot) => (
           <Paper
@@ -93,7 +95,7 @@ const TodoListItem: React.FC<TodoListItemProps> = ({ todo, index, sx, ...other }
         onUpdateTodo={(updatedTodo) => dispatch(updateTodo(updatedTodo))}
         onDeleteTodo={() => dispatch(deleteTodo(todo.id))}
       />
-    </>
+    </Box>
   );
 };
 

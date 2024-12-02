@@ -27,7 +27,7 @@ const todoSlice = createSlice({
   initialState,
   reducers: {
     addTodo: (state, action: PayloadAction<string>) => {
-      state.todos.push({
+      state.todos.unshift({
         id: Date.now().toString(),
         title: action.payload,
         completed: false,
