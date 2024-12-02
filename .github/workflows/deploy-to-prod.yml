@@ -27,9 +27,6 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Set up API endpoints
-        run: cp ./src/configs/${{ env.STAGE }}/app-config.ts ./src/configs/app-config.ts
-
       - name: Install AWS CDK
         run: npm install -g aws-cdk
 
