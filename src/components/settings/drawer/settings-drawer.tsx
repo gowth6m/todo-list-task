@@ -69,7 +69,7 @@ export default function SettingsDrawer() {
       </Typography>
 
       <Typography variant="caption" component="div" sx={{ ...labelStyles }}>
-        <Link href={AppConfig.links.landingPage} target={'_blank'} color={'text.primary'}>
+        <Link href={AppConfig.links.github} target={'_blank'} color={'text.primary'}>
           GitHub
         </Link>{' '}
         {AppConfig.metadata.version !== '' &&
