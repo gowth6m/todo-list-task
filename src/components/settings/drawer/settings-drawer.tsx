@@ -1,17 +1,17 @@
 import Stack from '@mui/material/Stack';
+import { Box, Link } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Drawer, { drawerClasses } from '@mui/material/Drawer';
 
+import { AppConfig } from 'src/configs/app-config';
 import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 import { setTheme, ThemeMode, toggleDrawer } from 'src/store/slices/settings-slice';
 
 import Iconify from '../../iconify';
 import Scrollbar from '../../scrollbar';
 import BaseOptions from './base-option';
-import { Box, Link } from '@mui/material';
-import { AppConfig } from 'src/configs/app-config';
 
 // ----------------------------------------------------------------------
 
@@ -59,13 +59,22 @@ export default function SettingsDrawer() {
   );
 
   const renderAppInfo = (
-    <Box>
+    <Box display={'flex'} flexDirection={'column'}>
       <Typography variant="caption" component="div" sx={{ ...labelStyles }}>
         Created by{' '}
         <Link href={AppConfig.links.landingPage} target={'_blank'} color={'text.primary'}>
           Gowth6m
         </Link>{' '}
         👋
+      </Typography>
+
+      <Typography variant="caption" component="div" sx={{ ...labelStyles }}>
+        <Link href={AppConfig.links.landingPage} target={'_blank'} color={'text.primary'}>
+          GitHub
+        </Link>{' '}
+        {AppConfig.metadata.version !== '' &&
+          !!AppConfig.metadata.version &&
+          `v${AppConfig.metadata.version}`}
       </Typography>
     </Box>
   );

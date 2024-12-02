@@ -21,6 +21,7 @@ jobs:
           echo "REGION=us-east-1" >> $GITHUB_ENV
           echo "ACCOUNT_ID=${{ vars.AWS_ACCOUNT_ID }}" >> $GITHUB_ENV
           echo "STAGE=prod" >> $GITHUB_ENV
+          echo "VITE_APP_VERSION=${{ github.sha }}" >> $GITHUB_ENV
 
       - name: Set up Node.js
         uses: actions/setup-node@v3

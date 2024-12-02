@@ -2,6 +2,7 @@ export const AppConfig = {
   metadata: {
     title: 'Todo List App',
     description: 'A simple todo list app',
+    version: import.meta.env.VITE_APP_VERSION,
   },
   assets: {
     appLogo: '/assets/logo.svg',
@@ -12,5 +13,6 @@ export const AppConfig = {
   },
   links: {
     landingPage: 'https://gowtham.io',
+    github: 'https://github.com/gowth6m/todo-list-task',
   },
 };
