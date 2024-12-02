@@ -5,13 +5,15 @@ import {
   Box,
   Card,
   Stack,
+  Alert,
+  Snackbar,
   TextField,
   Container,
   IconButton,
   Typography,
-  Alert,
-  Snackbar,
 } from '@mui/material';
+
+import { useResponsive } from 'src/hooks/use-responsive';
 
 import { useAppDispatch, useAppSelector } from 'src/store/hooks';
 import { Todo, addTodo, reorderTodos } from 'src/store/slices/todo-slice';
@@ -19,7 +21,6 @@ import { Todo, addTodo, reorderTodos } from 'src/store/slices/todo-slice';
 import Iconify from '../iconify';
 import Scrollbar from '../scrollbar';
 import TodoListItem from './todo-list-item';
-import { useResponsive } from 'src/hooks/use-responsive';
 
 // ----------------------------------------------------------------------
 
