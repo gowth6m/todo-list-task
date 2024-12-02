@@ -86,7 +86,7 @@ const TodoListDetails = ({
       {renderField('Created at', 'createdAt', fToNow(todo.createdAt))}
       {renderMarkAsComplete}
 
-      <Button variant={'contained'} onClick={onDeleteTodo}>
+      <Button variant={'contained'} onClick={onClose}>
         Close
       </Button>
 
